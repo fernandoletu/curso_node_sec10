@@ -22,7 +22,9 @@ const userGet = async(req = request, res = response) => {
 
     //Format 1
     /*const list = await User.find(query)
-        .limit(Number(limit))*/
+        .limit(Number(limit))
+        .skip((page - 1) * limit)
+        .exec()*/
     //const itemsTotal = await User.countDocuments(query)
 
     //Format 2 (all queries run at the same time)
@@ -33,6 +35,9 @@ const userGet = async(req = request, res = response) => {
             .skip((page - 1) * limit)
             .exec()
     ])
+
+    //Pagination info
+    //https://www.golinuxcloud.com/paginate-with-mongoose-in-node-js/
 
     res.status(200).json({
         msg: 'Ok',
