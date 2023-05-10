@@ -5,7 +5,13 @@ const bcryptjs = require("bcryptjs");
 //All methods for User
 
 const userGet = async(req = request, res = response) => {
-    const {id, nombre, email, page = 1, limit = 20} = req.query
+    const {
+        id,
+        nombre,
+        email,
+        page = 1,
+        limit = 5
+    } = req.query
 
     const query = {
         status: true,
@@ -20,18 +26,20 @@ const userGet = async(req = request, res = response) => {
     //const itemsTotal = await User.countDocuments(query)
 
     //Format 2 (all queries run at the same time)
-    const [itemsTotal, list] = await Promise.all([
+    const [itemCount, list] = await Promise.all([
         User.countDocuments(query),
         User.find(query)
             .limit(Number(limit))
+            .skip((page - 1) * limit)
+            .exec()
     ])
 
     res.status(200).json({
         msg: 'Ok',
         data: {
-            pageCurrent: page,
-            pageTotal: 1,
-            itemsTotal: itemsTotal,
+            pageNumber: Number(page),
+            pageCount: Math.ceil(itemCount/limit),
+            itemCount,
             data: list
         },
     })
