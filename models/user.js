@@ -35,7 +35,8 @@ const UserSchema = Schema({
 )
 
 UserSchema.methods.toJSON = function () {
-    const { __v, status, password, ...user } = this.toObject()
+    const { __v, status, password, _id, ...user } = this.toObject()
+    user.uid = _id  //Alias 'uid' for '_id' (MongoDB format)
 
     return user
 }

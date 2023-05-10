@@ -52,6 +52,9 @@ const userDataGet = async(req = request, res = response) => {
 const userPost = async(req, res = response) => {
     const {name, email, password, role} = req.body
 
+    //Get session logged user
+    //const sessionUser = req.sessionUser
+
     const user = new User()
     user.name = name
     user.email = email
